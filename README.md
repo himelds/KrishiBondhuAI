@@ -55,7 +55,7 @@ Instead of just predicting, we:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                          USER                               │
+│                    USER Upoload Image                       │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
@@ -66,12 +66,12 @@ Instead of just predicting, we:
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                     BACKEND API (Python)                    │
-└────────┬────────────────┼─────────────────┬────────────────┘
+└────────┬────────────────┼─────────────────┬─────────────────┘
          │                │                 │
          ▼                ▼                 ▼
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│   Disease    │  │   Weather    │  │   Location   │
-│  Detection   │  │   Data API   │  │  Detection   │
+│   Weather    │  │    Image     │  │   Location   │
+│   Data API   │  │              │  │  Detection   │
 └──────────────┘  └──────────────┘  └──────────────┘
          │                │                 │
          └────────────────┼─────────────────┘
@@ -86,12 +86,12 @@ Instead of just predicting, we:
 │              🤖 Gemma AI (Reasoning Engine)                 │
 └─────────────────────────┬───────────────────────────────────┘
                           │
-          ┌───────────────┼───────────────┐
-          ▼               ▼               ▼
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│    Bangla    │  │   Treatment  │  │     TTS      │
-│   Advice     │  │     Plan     │  │ Voice Output │
-└──────────────┘  └──────────────┘  └──────────────┘
+          ┌──────────────────────────┼─────────────────┐
+          ▼                          ▼                 ▼
+┌───────────────────────┐     ┌──────────────┐  ┌──────────────┐
+│    Disease name       │     │     Spray    │  │ Risk warning │
+│Explanation, Treatment │     │   Decision   │  │              │
+└───────────────────────┘     └──────────────┘  └──────────────┘
 ```
 
 ---
@@ -154,7 +154,6 @@ krishibondhu-ai/
 ├── app.py                  # Frontend (Streamlit)
 │
 ├── backend/
-│   ├── disease.py          # Disease detection
 │   ├── weather.py          # Weather API integration
 │   ├── location.py         # Location detection
 │   ├── gemma.py            # AI reasoning engine
@@ -172,7 +171,7 @@ Follow these steps carefully 👇
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/himelds/KrishiBondhuAI.git
 cd krishibondhu-ai
 ```
 
@@ -180,7 +179,7 @@ cd krishibondhu-ai
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv\Scripts\activate
 ```
 
 3. Install dependencies:
