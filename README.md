@@ -160,11 +160,39 @@ krishibondhu-ai/
 │   ├── gemma.py            # AI reasoning engine
 │   └── tts.py              # Text-to-speech (Bangla)
 │
-├── models/                 # ML models (MobileNet/EfficientNet)
-│
-├── utils/                  # Helper functions
-│
 └── requirements.txt        # Python dependencies
+```
+
+---
+
+## ⚙️ Setup Instructions (IMPORTANT)
+
+Follow these steps carefully 👇
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd krishibondhu-ai
+```
+
+2. Create a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the app:
+
+```bash
+streamlit run app.py
 ```
 
 ---
