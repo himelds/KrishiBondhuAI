@@ -1,6 +1,5 @@
 # 🌾 KrishiBondhu AI  
 ### Bangla Multimodal Farming Assistant powered by Gemma
-
 🚀 Built for the Gemma 4 Good Hackathon (Kaggle)
 
 ---
@@ -53,18 +52,47 @@ Instead of just predicting, we:
 ---
 
 ## 🏗️ System Architecture
-User → Frontend → Backend API
-↓
-(Disease + Weather + Location)
-↓
-Data Aggregation Layer
-↓
-Gemma AI (Reasoning Engine)
-↓
-Advice (Bangla) + Voice Output
 
----
-
+```
+┌─────────────────────────────────────────────────────────────┐
+│                          USER                               │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     FRONTEND (Streamlit)                    │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     BACKEND API (Python)                    │
+└────────┬────────────────┼─────────────────┬────────────────┘
+         │                │                 │
+         ▼                ▼                 ▼
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│   Disease    │  │   Weather    │  │   Location   │
+│  Detection   │  │   Data API   │  │  Detection   │
+└──────────────┘  └──────────────┘  └──────────────┘
+         │                │                 │
+         └────────────────┼─────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│               Data Aggregation Layer                        │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│              🤖 Gemma AI (Reasoning Engine)                 │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+          ┌───────────────┼───────────────┐
+          ▼               ▼               ▼
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│    Bangla    │  │   Treatment  │  │     TTS      │
+│   Advice     │  │     Plan     │  │ Voice Output │
+└──────────────┘  └──────────────┘  └──────────────┘
+```
 
 ---
 
@@ -107,32 +135,56 @@ Advice (Bangla) + Voice Output
 
 ## 🛠️ Tech Stack
 
-| Component | Technology |
-|----------|-----------|
-| Frontend | Streamlit |
-| Backend | Python |
-| AI Model | Gemma |
-| CV Model | MobileNet / EfficientNet |
-| Weather API | OpenWeather |
-| TTS | gTTS |
+| Component   | Technology             |
+|-------------|------------------------|
+| Frontend    | Streamlit              |
+| Backend     | Python                 |
+| AI Model    | Gemma                  |
+| CV Model    | MobileNet / EfficientNet |
+| Weather API | OpenWeather            |
+| TTS         | gTTS                   |
 
 ---
 
 ## 📂 Project Structure
+
+```
 krishibondhu-ai/
 │
-├── app.py # Frontend (Streamlit)
+├── app.py                  # Frontend (Streamlit)
 │
 ├── backend/
-│ ├── disease.py # Disease detection
-│ ├── weather.py # Weather API
-│ ├── location.py # Location detection
-│ ├── gemma.py # AI reasoning
-│ └── tts.py # Text-to-speech
+│   ├── disease.py          # Disease detection
+│   ├── weather.py          # Weather API integration
+│   ├── location.py         # Location detection
+│   ├── gemma.py            # AI reasoning engine
+│   └── tts.py              # Text-to-speech (Bangla)
 │
-├── models/ # ML models
-├── utils/ # Helper functions
-└── requirements.txt
-
+├── models/                 # ML models (MobileNet/EfficientNet)
+│
+├── utils/                  # Helper functions
+│
+└── requirements.txt        # Python dependencies
+```
 
 ---
+
+## 👥 Contributors
+
+<table>
+  <tr>
+    <td align="center">
+      <b>Himel Das</b>
+    </td>
+    <td align="center">
+      <b>Shuva Palit</b>
+    </td>
+    <td align="center">
+      <b>Trisha Das</b>
+    </td>
+  </tr>
+</table>
+
+---
+
+> Made with ❤️ for the farmers of Bangladesh
