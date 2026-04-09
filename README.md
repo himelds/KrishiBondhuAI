@@ -151,7 +151,8 @@ Instead of just predicting, we:
 ```
 krishibondhu-ai/
 │
-├── app.py                  # Frontend (Streamlit)
+├── frontend                 # Frontend (Streamlit)
+│   ├── app.py
 │
 ├── backend/
 │   ├── weather.py          # Weather API integration
