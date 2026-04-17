@@ -1,27 +1,19 @@
+import os
 from PIL import Image
 import io
+from google import genai
+from google.genai import types
 
-def build_prompt(weather):
-    return f"""
-You are an agricultural assistant for Bangladeshi farmers.
-
-Analyze the crop image and identify the disease.
-
-Then:
-1. Name the disease
-2. Explain in simple Bangla
-3. Give treatment advice
-4. Decide if spraying pesticide/fertilizer is appropriate
-5. Explain based on weather
-6. Give risk warning
-
-Weather:
-- Rain: {"Yes" if weather["rain"] else "No"}
-- Humidity: {weather["humidity"]}%
-- Temperature: {weather["temperature"]}°C
-
-Answer in simple Bangla.
-
+def build_prompt(weather, language):
+    lang_instruction = "Answer strictly in English." if language == "English" else "Answer strictly in simple Bangla."
+    
+    format_instruction = """
+Format:
+Disease: 
+Treatment: 
+Advice: 
+Warning: 
+""" if language == "English" else """
 Format:
 রোগ:
 চিকিৎসা:
@@ -29,30 +21,74 @@ Format:
 সতর্কতা:
 """
 
-def get_advice(data):
-    image_file = data["image"]
-    weather = data["weather"]
+    return f"""
+You are an agricultural assistant for farmers.
 
-    # Convert uploaded file to PIL Image
-    image = Image.open(io.BytesIO(image_file.read()))
+Analyze the crop image and identify the disease.
 
-    # Build prompt
-    prompt = build_prompt(weather)
+Then:
+1. Name the disease
+2. Explain it simply
+3. Give treatment advice
+4. Decide if spraying pesticide/fertilizer is appropriate based on weather
+5. Give risk warning
 
-    # 🔴 TEMPORARY (since real Gemma multimodal not connected yet)
-    # This is just to keep system running
-    response = f"""
-রোগ:
-পাতায় দাগ দেখা যাচ্ছে (সম্ভাব্য রোগ)
+Weather Context:
+- Rain: {"Yes" if weather["rain"] else "No"}
+- Humidity: {weather["humidity"]}%
+- Temperature: {weather["temperature"]}°C
 
-চিকিৎসা:
-উপযুক্ত ছত্রাকনাশক ব্যবহার করুন।
-
-পরামর্শ:
-{"এখন স্প্রে করবেন না (বৃষ্টি আসছে)" if weather["rain"] else "এখন স্প্রে করা যেতে পারে"}
-
-সতর্কতা:
-উচ্চ আর্দ্রতায় রোগ দ্রুত ছড়াতে পারে।
+{lang_instruction}
+{format_instruction}
 """
 
-    return response
+def chat_with_agent(messages_ui, language):
+    client = genai.Client()
+    
+    # Enforcer string to prevent language drift
+    enforcer = "\n\n[Reply strictly in English.]" if language == "English" else "\n\n[অবশ্যই বাংলা ভাষায় উত্তর দিন।]"
+    
+    # Convert Streamlit dictionary messages to GenAI Content objects
+    contents = []
+    for i, msg in enumerate(messages_ui):
+        role = "user" if msg["role"] == "user" else "model"
+        parts = msg["content"]
+        
+        is_last_message = (i == len(messages_ui) - 1)
+        
+        if isinstance(parts, list):
+            genai_parts = []
+            for p in parts:
+                if isinstance(p, dict) and "image" in p:
+                    image_file = p["image"]
+                    img = Image.open(io.BytesIO(image_file.read()))
+                    image_file.seek(0) # Reset pointer
+                    
+                    img_byte_arr = io.BytesIO()
+                    # Convert to RGB to prevent transparency saving errors in JPEG
+                    if img.mode != 'RGB':
+                        img = img.convert('RGB')
+                    img.save(img_byte_arr, format='JPEG')
+                    image_bytes = img_byte_arr.getvalue()
+                    
+                    genai_parts.append(types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"))
+                else:
+                    text_str = str(p)
+                    if is_last_message and role == "user":
+                        text_str += enforcer
+                    genai_parts.append(types.Part.from_text(text=text_str))
+            contents.append(types.Content(role=role, parts=genai_parts))
+        else:
+            text_str = str(parts)
+            if is_last_message and role == "user":
+                text_str += enforcer
+            contents.append(types.Content(role=role, parts=[types.Part.from_text(text=text_str)]))
+
+    try:
+        response = client.models.generate_content(
+            model='gemma-4-31b-it',
+            contents=contents,
+        )
+        return response.text
+    except Exception as e:
+        return f"Error / ত্রুটি: {str(e)}"
