@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Inter:wght@400;600;800&display=swap');
+
+/* Base Styles */
+html, body, [class*="css"] {
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif !important;
+}
+
+/* Fluid Glassmorphism Containers integrating with Streamlit themes */
+.stTextInput>div>div>input, 
+.stFileUploader>div>div, 
+.stRadio>div, 
+div[data-testid="stChatMessage"] {
+    background: var(--secondary-background-color) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(128, 128, 128, 0.2) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05) !important;
+    color: var(--text-color) !important;
+}
+
+/* Titles */
+h1 {
+    text-align: center;
+    background: -webkit-linear-gradient(45deg, #0ba360, #3cba92);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    padding-bottom: 0.5rem;
+}
+
+/* Buttons */
+.stButton>button {
+    background: linear-gradient(45deg, #0ba360, #3cba92) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 30px !important;
+    border: none !important;
+    padding: 0.5rem 2rem !important;
+    box-shadow: 0 4px 15px rgba(11, 163, 96, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+.stButton>button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(11, 163, 96, 0.4) !important;
+}
+
+/* Chat Input Styling */
+.stChatInputContainer {
+    background: var(--secondary-background-color) !important;
+    border-radius: 20px !important;
+    border: 2px solid #3cba92 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Highlight AI messages */
+div[data-testid="stChatMessage"]:nth-child(even) {
+    background: rgba(11, 163, 96, 0.1) !important;
+    border-left: 5px solid #0ba360 !important;
+}

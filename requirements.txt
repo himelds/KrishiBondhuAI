@@ -4,3 +4,6 @@ geocoder
 gtts
 transformers
 torch
+google-genai
+python-dotenv
+streamlit-geolocation
